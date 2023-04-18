@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 
 const theme = createTheme();
 
-export default function login() {
+export default function loginpage() {
   const router = useRouter();
 
   const handleSubmit = (event) => {
