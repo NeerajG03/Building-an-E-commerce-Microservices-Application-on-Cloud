@@ -8,16 +8,19 @@ const productList = [
     pid: "01",
     pname: "Santoor",
     pquantity: 300,
+    pprice : 100
   },
   {
     pid: "02",
     pname: "Gandor",
-    pquantity: 300,
+    pquantity: 0,
+    pprice : 200
   },
   {
     pid: "03",
     pname: "Hunter",
-    pquantity: 300,
+    pquantity: 100,
+    pprice : 200
   },
 ];
 
