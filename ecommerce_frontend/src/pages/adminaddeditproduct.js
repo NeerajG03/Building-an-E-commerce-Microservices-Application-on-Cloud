@@ -1,22 +1,23 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 const theme = createTheme();
 
 export default function adminaddeditproduct() {
   const router = useRouter();
+
+  useEffect(() => {
+    console.log(router.query)
+    if (router.query.isEdit) console.log("edit boy");
+    else console.log("edit no boy");
+  }, [router.query]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -51,7 +52,8 @@ export default function adminaddeditproduct() {
             name="id"
             autoComplete="pid"
             autoFocus
-          />
+            defaultValue={router.query.isEdit ? router.query.pid : ""}
+/>
           <TextField
             margin="normal"
             required
@@ -60,6 +62,7 @@ export default function adminaddeditproduct() {
             label="Product Name"
             id="pname"
             autoComplete="pname"
+            defaultValue={router.query.isEdit ? router.query.pname : ""}
           />
           <TextField
             margin="normal"
@@ -69,6 +72,7 @@ export default function adminaddeditproduct() {
             label="Product Quantity"
             id="pquantity"
             autoComplete="pquantity"
+            defaultValue={router.query.isEdit ? router.query.pquantity : ""}
           />
           <Button
             type="submit"
@@ -94,68 +98,5 @@ export default function adminaddeditproduct() {
         </Box>
       </Container>
     </ThemeProvider>
-
-    // <ThemeProvider theme={theme}>
-    //   <Container component="main" maxWidth="xs">
-    //     <CssBaseline />
-    //     <Box
-    //       sx={{
-    //         marginTop: 8,
-    //         display: "flex",
-    //         flexDirection: "column",
-    //         alignItems: "center",
-    //       }}
-    //     >
-    //       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-    //         <LockOutlinedIcon />
-    //       </Avatar>
-    //       <Typography component="h1" variant="h5">
-    //         Add Product
-    //       </Typography>
-    //       <Box
-    //         component="form"
-    //         onSubmit={handleSubmit}
-    //         noValidate
-    //         sx={{ mt: 1 }}
-    //       >
-    //         <TextField
-    //           margin="normal"
-    //           required
-    //           fullWidth
-    //           id="email"
-    //           label="Email Address"
-    //           name="email"
-    //           autoComplete="email"
-    //           autoFocus
-    //         />
-    //         <TextField
-    //           margin="normal"
-    //           required
-    //           fullWidth
-    //           name="password"
-    //           label="Password"
-    //           type="password"
-    //           id="password"
-    //           autoComplete="current-password"
-    //         />
-
-    //         <Grid container>
-    //           <Grid item xs />
-    //           <Grid item>
-    //             <Link
-    //               href="#"
-    //               variant="body2"
-    //               onClick={() => {
-    //                 router.push("register");
-    //               }}
-    //             >
-    //               {"Don't have an account? Sign Up"}
-    //             </Link>
-    //           </Grid>
-    //         </Grid>
-    //       </Box>
-    //     </Box>
-    //   </Container>
-    // </ThemeProvider>
   );
 }

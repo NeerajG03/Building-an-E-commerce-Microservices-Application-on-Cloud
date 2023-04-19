@@ -5,19 +5,19 @@ import { useRouter } from "next/router";
 
 const productList = [
   {
-    id: "01",
-    name: "Santoor",
-    quantity: 300,
+    pid: "01",
+    pname: "Santoor",
+    pquantity: 300,
   },
   {
-    id: "02",
-    name: "Gandor",
-    quantity: 300,
+    pid: "02",
+    pname: "Gandor",
+    pquantity: 300,
   },
   {
-    id: "03",
-    name: "Hunter",
-    quantity: 300,
+    pid: "03",
+    pname: "Hunter",
+    pquantity: 300,
   },
 ];
 
