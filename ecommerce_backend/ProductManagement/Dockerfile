@@ -5,5 +5,5 @@ RUN npm install
 # If you are building your code for production
 # RUN npm ci --omit=dev
 COPY . .
-EXPOSE 8001
+EXPOSE 8002
 CMD [ "node", "server.js" ]

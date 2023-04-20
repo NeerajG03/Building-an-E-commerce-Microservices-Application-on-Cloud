@@ -6,26 +6,45 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useRouter } from "next/router";
+import { signup } from "@/helperfunctions/user";
 
 const theme = createTheme();
 
 export default function register() {
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const userData = {
       name: data.get("name"),
       address: data.get("address"),
       email: data.get("email"),
       password: data.get("password"),
+      isAdmin,
+    };
+
+    let pathname = "";
+
+    if ((await signup(userData)) === true) {
+      if (isAdmin) pathname = "adminproduct";
+      else pathname = "userproduct";
+    }
+
+    router.push({
+      pathname,
+      query: {
+        email: userData.email,
+      },
     });
   };
 
@@ -96,6 +115,16 @@ export default function register() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value="isadmin"
+                      color="primary"
+                      onChange={() => setIsAdmin((prev) => !prev)}
+                    />
+                  }
+                  label="Are you admin?"
                 />
               </Grid>
             </Grid>

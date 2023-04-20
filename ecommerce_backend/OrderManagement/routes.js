@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Order = require("./order");
 
 // Routes
 router.get("/getorderhistory", (req, res) => {

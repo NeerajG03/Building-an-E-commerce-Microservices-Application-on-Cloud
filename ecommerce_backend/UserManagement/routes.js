@@ -1,21 +1,65 @@
 const express = require("express");
 const router = express.Router();
 
+//Mongoose
+const mongoose = require("mongoose");
+const User = require("./user");
+
+//Connect to db
+mongoose
+  .connect(
+    "mongodb+srv://xdneeraj:Root@clusterstore.16q3u8s.mongodb.net/ecommerce?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log("Connected to DB");
+  })
+  .catch((err) => {
+    console.log("Error : ", err);
+  });
+
 // Routes
-router.get("/getprofile", (req, res) => {
-  res.send("getprofile");
+router.post("/getorders", async (req, res) => {
+  const data = await User.findOne({
+    email: req.body.email,
+  });
+
+  if (!data || !data.order) res.status(401).send("Error");
+  else {
+    console.log(data);
+    res.status(200).json(data.order);
+  }
 });
 
-router.post("/login", (req, res) => {
-  res.send("login");
+router.post("/login", async (req, res) => {
+  const data = await User.findOne({
+    email: req.body.email,
+    password: req.body.password,
+    isAdmin: req.body.isAdmin,
+  });
+
+  if (!data) res.status(401).send("Error");
+  else {
+    console.log(data);
+    res.status(200).send("Success");
+  }
 });
 
-router.post("/register", (req, res) => {
-  res.send("register");
-});
+router.post("/register", async (req, res) => {
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    address: req.body.address,
+    isAdmin: req.body.isAdmin,
+    order: [{ oid: "01", otime: "10:19", ototal: 3080, ostatus: "New" }],
+  });
 
-router.patch("/updateprofile", (req, res) => {
-  res.send("updateprofile");
+  const data = await user.save();
+  if (!data) res.status(401).send("Error");
+  else {
+    console.log(data);
+    res.status(200).send("Success");
+  }
 });
 
 module.exports = router;
