@@ -25,7 +25,7 @@ router.post("/getorders", async (req, res) => {
 
   if (!data || !data.order) res.status(401).send("Error");
   else {
-    console.log(data);
+    // console.log(data);
     res.status(200).json(data.order);
   }
 });
@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
 
   if (!data) res.status(401).send("Error");
   else {
-    console.log(data);
+    // console.log(data);
     res.status(200).send("Success");
   }
 });
@@ -51,13 +51,13 @@ router.post("/register", async (req, res) => {
     password: req.body.password,
     address: req.body.address,
     isAdmin: req.body.isAdmin,
-    order: [{ oid: "01", otime: "10:19", ototal: 3080, ostatus: "New" }],
+    order: [],
   });
 
   const data = await user.save();
   if (!data) res.status(401).send("Error");
   else {
-    console.log(data);
+    // console.log(data);
     res.status(200).send("Success");
   }
 });

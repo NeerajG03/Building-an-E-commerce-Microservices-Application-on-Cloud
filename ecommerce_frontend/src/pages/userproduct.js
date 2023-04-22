@@ -27,19 +27,19 @@ const productList = [
 
 const orderList = [
   {
-    oid: "01",
+    _id: "01",
     otime: "2023-04-30",
     ototal: 500,
     ostatus: "New",
   },
   {
-    oid: "01",
+    _id: "01",
     otime: "2023-04-30",
     ototal: 500,
     ostatus: "New",
   },
   {
-    oid: "01",
+    _id: "01",
     otime: "2023-04-30",
     ototal: 500,
     ostatus: "New",
@@ -59,7 +59,7 @@ export default function userproduct() {
       <Typography variant="h2" sx={{ padding: "16px" }}>
         User Order Page
       </Typography>
-      <UserProductList products={productList} />
+      <UserProductList products={productList} email={email} />
       <Box sx={{ textAlign: "right", marginRight: "93px" }}>
         <Button
           variant="contained"

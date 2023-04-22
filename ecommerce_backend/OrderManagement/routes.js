@@ -1,18 +1,56 @@
 const express = require("express");
 const router = express.Router();
-const Order = require("./order");
+
+//Mongoose
+const mongoose = require("mongoose");
+const User = require("./user");
+
+//Connect to db
+mongoose
+  .connect(
+    "mongodb+srv://xdneeraj:Root@clusterstore.16q3u8s.mongodb.net/ecommerce?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    console.log("Connected to DB");
+  })
+  .catch((err) => {
+    console.log("Error : ", err);
+  });
 
 // Routes
-router.get("/getorderhistory", (req, res) => {
-  res.send("getorderhistory");
+router.post("/placeorder", async (req, res) => {
+  //append to arr
+  const ostatus = "New";
+  const d = new Date();
+  const otime = d.toLocaleString();
+  const data = await User.findOneAndUpdate(
+    { email: req.body.email },
+    { $push: { order: { ostatus, otime, ototal: req.body.ototal } } }
+  );
+
+  if (data) {
+    // console.log(data);
+    res.status(200).send("Success");
+  } else {
+    res.status(500).send("Error");
+  }
 });
 
-router.post("/placeorder", (req, res) => {
-  res.send("placeorder");
-});
+router.patch("/cancelorder", async (req, res) => {
+  const data = await User.findOneAndUpdate(
+    {
+      email: req.body.email,
+      "order._id": req.body._id,
+    },
+    { $set: { "order.$.ostatus": "Cancelled" } }
+  );
 
-router.patch("/cancelorder", (req, res) => {
-  res.send("cancelorder");
+  if (data) {
+    console.log(data);
+    res.status(200).send("Success");
+  } else {
+    res.status(500).send("Error");
+  }
 });
 
 module.exports = router;

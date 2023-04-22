@@ -3,10 +3,10 @@ import { Typography, Box, Button } from "@mui/material";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-// import { getOrders } from "../helperfunctions/order";
 
 export default function userorder() {
   const [orderList, setOrderList] = useState([]);
+  const [email, setEmail] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -34,7 +34,8 @@ export default function userorder() {
     };
 
     if (router.query.email) {
-      console.log(router.query.email);
+      setEmail(router.query.email);
+      // console.log(router.query.email);
       getOrders({ email: router.query.email });
     }
   }, [router.query]);
@@ -44,13 +45,18 @@ export default function userorder() {
       <Typography variant="h2" sx={{ padding: "16px" }}>
         User Order Page
       </Typography>
-      <OrderList products={orderList} />
+      <OrderList products={orderList} email={email} />
       <Box sx={{ textAlign: "right", marginRight: "92px" }}>
         <Button
           variant="contained"
           startIcon={<FastRewindIcon />}
           onClick={() => {
-            router.push("userproduct");
+            router.push({
+              pathname: "userproduct",
+              query: {
+                email: email,
+              },
+            });
           }}
         >
           Back

@@ -8,14 +8,14 @@ export const signup = async (userData) => {
       },
     });
     if (result.status === 200) {
-      console.log("Success:", result);
       return true;
     } else {
       console.log("Error in Node JS, Code : ", result.status);
+      alert("Authentication Failed");
       return false;
     }
   } catch (error) {
-    console.error("Error:", error);
+    alert("Connection Error");
     return false;
   }
 };
@@ -30,14 +30,13 @@ export const login = async (userData) => {
       },
     });
     if (result.status === 200) {
-      console.log("Success:", result);
       return true;
     } else {
-      console.log("Error in Node JS, Code : ", result.status);
+      alert("Authentication Failed, Wrong Email/Password?");
       return false;
     }
   } catch (error) {
-    console.error("Error:", error);
+    alert("Connection Error");
     return false;
   }
 };

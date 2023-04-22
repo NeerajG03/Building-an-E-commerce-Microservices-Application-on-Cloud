@@ -30,7 +30,7 @@
 
 ```
 {
-    'oid': string,
+    _id: string,
     'otime': string,
     'ototal': int,
     'ostatus': string
