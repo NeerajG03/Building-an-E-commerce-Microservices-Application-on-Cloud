@@ -29,10 +29,10 @@ const UserProductList = ({ products, email }) => {
 
   const addTocart = (product) => {
     const tempCart = { ...cart };
-    if (tempCart[product.pid]) {
-      tempCart[product.pid] += 1;
+    if (tempCart[product._id]) {
+      tempCart[product._id] += 1;
     } else {
-      tempCart[product.pid] = 1;
+      tempCart[product._id] = 1;
     }
     tempCart.total += 1;
     setCart(tempCart);
@@ -40,8 +40,8 @@ const UserProductList = ({ products, email }) => {
 
   const removeFromCart = (product) => {
     const tempCart = { ...cart };
-    if (tempCart[product.pid]) {
-      tempCart[product.pid] -= 1;
+    if (tempCart[product._id]) {
+      tempCart[product._id] -= 1;
       tempCart.total -= 1;
     }
     setCart(tempCart);
@@ -50,12 +50,12 @@ const UserProductList = ({ products, email }) => {
   const placeOrder = async () => {
     let ototal = 0;
     const productDict = products.reduce((dict, product) => {
-      dict[product.pid] = product.pprice;
+      dict[product._id] = product.pprice;
       return dict;
     }, {});
 
-    Object.keys(cart).forEach((pid) => {
-      if (pid != "total") ototal += cart[pid] * productDict[pid];
+    Object.keys(cart).forEach((_id) => {
+      if (_id != "total") ototal += cart[_id] * productDict[_id];
     });
 
     if (ototal > 0) {
@@ -104,12 +104,12 @@ const UserProductList = ({ products, email }) => {
           ) : (
             <List>
               {filteredProducts.map((product) => (
-                <ListItem key={product.pid}>
+                <ListItem key={product._id}>
                   <ListItemText primary={product.pname} />
                   <ListItemText secondary={"price : " + product.pprice} />
                   <ListItemText
                     secondary={
-                      cart[product.pid] === undefined ? 0 : cart[product.pid]
+                      cart[product._id] === undefined ? 0 : cart[product._id]
                     }
                   />
 

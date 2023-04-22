@@ -19,7 +19,6 @@ mongoose
 
 // Routes
 router.post("/placeorder", async (req, res) => {
-  //append to arr
   const ostatus = "New";
   const d = new Date();
   const otime = d.toLocaleString();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   List,
   ListItem,
@@ -13,37 +13,70 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRouter } from "next/router";
+import { deleteproduct } from "@/helperfunctions/product";
 
 const theme = createTheme();
 
-const ProductList = ({ products }) => {
+const ProductList = () => {
   const router = useRouter();
-  const [searchText, setSearchText] = useState("");
+  // const [searchText, setSearchText] = useState("");
+  const [products, setProducts] = useState([]);
 
-  const handleDelete = (product) => {
-    // Handle delete logic here
+  useEffect(() => {
+    const getproducts = async () => {
+      try {
+        const result = await fetch("http://localhost:8002/getproducts", {
+          method: "GET",
+        });
+        if (result.status === 200) {
+          const data = await result.json();
+          setProducts(data);
+        } else {
+          console.log("Error in Node JS, Code : ", result.status);
+          alert("Could Not Get Products");
+          setProducts([]);
+        }
+      } catch (error) {
+        console.log(error);
+        alert("Connection Error");
+        setProducts([]);
+      }
+    };
+
+    getproducts();
+  }, []);
+
+  const handleDelete = async (_id) => {
+    const res = await deleteproduct(_id);
+    if (res) {
+      setProducts((prevProducts) => {
+        return prevProducts.filter((product) => product._id != _id);
+      });
+    }
   };
 
   const handleEdit = (product) => {
     // Handle edit logic here
     router.push({
-      pathname: 'adminaddeditproduct',
+      pathname: "adminaddeditproduct",
       query: {
-        isEdit : true,
-        pid : product.pid,
+        isEdit: true,
+        _id: product._id,
         pname: product.pname,
-        pquantity: product.pquantity
-      }
+        pquantity: product.pquantity,
+        pprice: product.pprice,
+      },
     });
-
   };
   const handleSearchChange = (event) => {
-    setSearchText(event.target.value);
+    setProducts((prevProducts) => {
+      return prevProducts.filter((product) =>
+        product.pname.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+    });
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.pname.toLowerCase().includes(searchText.toLowerCase())
-  );
+  // const products =
 
   return (
     <ThemeProvider theme={theme}>
@@ -51,26 +84,27 @@ const ProductList = ({ products }) => {
         {/* <Typography variant="h6">Product List</Typography> */}
         <TextField
           label="Search Products"
-          value={searchText}
+          // value={searchText}
           onChange={handleSearchChange}
           sx={{ margin: "16px" }}
         />
         <Box
           sx={{
-            bgcolor: filteredProducts.length === 0 ? "#eba1a1" : "#f5f5f5",
+            bgcolor: products.length === 0 ? "#eba1a1" : "#f5f5f5",
             margin: "16px",
             borderRadius: "28px",
           }}
         >
-          {filteredProducts.length === 0 ? (
+          {products.length === 0 ? (
             <Typography sx={{ padding: "20px" }}>No products found</Typography>
           ) : (
             <List>
-              {filteredProducts.map((product) => (
-                <ListItem key={product.pid}>
+              {products.map((product) => (
+                <ListItem key={product._id}>
                   <ListItemText primary={product.pname} />
                   <ListItemText primary={product.pquantity} />
-                  <IconButton onClick={() => handleDelete(product)}>
+                  <ListItemText primary={product.pprice} />
+                  <IconButton onClick={() => handleDelete(product._id)}>
                     <DeleteIcon sx={{ margin: "5px" }} />
                   </IconButton>
                   <IconButton onClick={() => handleEdit(product)}>

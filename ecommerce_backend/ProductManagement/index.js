@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 
 // Constants
 const PORT = 8002;
@@ -8,6 +9,8 @@ const HOST = "0.0.0.0";
 const app = express();
 const routes = require("./routes");
 
+app.use(cors());
+app.use(express.json());
 app.use("/", routes);
 
 app.listen(PORT, HOST, () => {
