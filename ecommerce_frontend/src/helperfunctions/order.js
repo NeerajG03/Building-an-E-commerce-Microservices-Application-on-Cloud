@@ -22,6 +22,7 @@ export const cancelorder = async (email, _id) => {
 
 export const placeorder = async (order) => {
   try {
+    console.log("Sending place order request")
     const result = await fetch("http://localhost:8003/placeorder", {
       method: "POST",
       body: JSON.stringify(order),

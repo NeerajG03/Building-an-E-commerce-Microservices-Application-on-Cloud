@@ -1,5 +1,6 @@
 export const signup = async (userData) => {
   try {
+    console.log("Sending register request")
     const result = await fetch("http://localhost:8001/register", {
       method: "POST",
       body: JSON.stringify(userData),

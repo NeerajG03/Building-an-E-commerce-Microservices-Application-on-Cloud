@@ -19,6 +19,7 @@ mongoose
 
 // Routes
 router.post("/placeorder", async (req, res) => {
+  console.log("Recieved place order request")
   const ostatus = "New";
   const d = new Date();
   const otime = d.toLocaleString();

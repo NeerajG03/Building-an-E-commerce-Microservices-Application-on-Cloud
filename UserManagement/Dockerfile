@@ -6,4 +6,4 @@ RUN npm install
 # RUN npm ci --omit=dev
 COPY . .
 EXPOSE 8001
-CMD [ "node", "server.js" ]
+CMD [ "node", "index.js" ]
