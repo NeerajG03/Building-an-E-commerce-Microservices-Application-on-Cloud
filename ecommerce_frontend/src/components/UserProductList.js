@@ -100,7 +100,6 @@ const UserProductList = ({ email }) => {
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ padding: "16px" }}>
-        {/* <Typography variant="h6">Product List</Typography> */}
         <TextField
           label="Search Products"
           value={searchText}
