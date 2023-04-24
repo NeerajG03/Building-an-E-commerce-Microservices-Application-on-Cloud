@@ -14,7 +14,7 @@ const productList = [
   {
     _id: "02",
     pname: "Gandor",
-    pquantity: 0,
+    pquantity: 10,
     pprice: 200,
   },
   {
@@ -59,7 +59,7 @@ export default function userproduct() {
       <Typography variant="h2" sx={{ padding: "16px" }}>
         User Order Page
       </Typography>
-      <UserProductList products={productList} email={email} />
+      <UserProductList email={email} />
       <Box sx={{ textAlign: "right", marginRight: "93px" }}>
         <Button
           variant="contained"

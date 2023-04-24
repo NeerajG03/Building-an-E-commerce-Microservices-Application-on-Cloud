@@ -19,7 +19,7 @@ const theme = createTheme();
 
 const ProductList = () => {
   const router = useRouter();
-  // const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -69,6 +69,7 @@ const ProductList = () => {
     });
   };
   const handleSearchChange = (event) => {
+    console.log(event.target.value)
     setProducts((prevProducts) => {
       return prevProducts.filter((product) =>
         product.pname.toLowerCase().includes(event.target.value.toLowerCase())
@@ -84,8 +85,8 @@ const ProductList = () => {
         {/* <Typography variant="h6">Product List</Typography> */}
         <TextField
           label="Search Products"
-          // value={searchText}
-          onChange={handleSearchChange}
+          value={searchText}
+          onChange={(e)=>setSearchText(e.target.value.toLowerCase())}
           sx={{ margin: "16px" }}
         />
         <Box
@@ -99,7 +100,8 @@ const ProductList = () => {
             <Typography sx={{ padding: "20px" }}>No products found</Typography>
           ) : (
             <List>
-              {products.map((product) => (
+              {products.filter((product) =>
+        product.pname.toLowerCase().includes(searchText)).map((product) => (
                 <ListItem key={product._id}>
                   <ListItemText primary={product.pname} />
                   <ListItemText primary={product.pquantity} />

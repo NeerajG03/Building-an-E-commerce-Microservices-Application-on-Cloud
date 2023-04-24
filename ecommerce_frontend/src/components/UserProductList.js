@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   List,
   ListItem,
@@ -19,11 +19,36 @@ import { placeorder } from "@/helperfunctions/order";
 
 const theme = createTheme();
 
-const UserProductList = ({ products, email }) => {
+const UserProductList = ({ email }) => {
   const router = useRouter();
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({
     total: 0,
   });
+
+  useEffect(() => {
+    const getproducts = async () => {
+      try {
+        const result = await fetch("http://localhost:8002/getproducts", {
+          method: "GET",
+        });
+        if (result.status === 200) {
+          const data = await result.json();
+          setProducts(data);
+        } else {
+          console.log("Error in Node JS, Code : ", result.status);
+          alert("Could Not Get Products");
+          setProducts([]);
+        }
+      } catch (error) {
+        console.log(error);
+        alert("Connection Error");
+        setProducts([]);
+      }
+    };
+
+    getproducts();
+  }, []);
 
   const [searchText, setSearchText] = useState("");
 
@@ -72,16 +97,6 @@ const UserProductList = ({ products, email }) => {
     }
   };
 
-  const handleSearchChange = (event) => {
-    setSearchText(event.target.value);
-  };
-
-  const filteredProducts = products.filter(
-    (product) =>
-      product.pname.toLowerCase().includes(searchText.toLowerCase()) &&
-      parseInt(product.pquantity) != 0
-  );
-
   return (
     <ThemeProvider theme={theme}>
       <Container sx={{ padding: "16px" }}>
@@ -89,38 +104,46 @@ const UserProductList = ({ products, email }) => {
         <TextField
           label="Search Products"
           value={searchText}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearchText(e.target.value)}
           sx={{ margin: "16px" }}
         />
         <Box
           sx={{
-            bgcolor: filteredProducts.length === 0 ? "#eba1a1" : "#f5f5f5",
+            bgcolor: products.length === 0 ? "#eba1a1" : "#f5f5f5",
             margin: "16px",
             borderRadius: "28px",
           }}
         >
-          {filteredProducts.length === 0 ? (
+          {products.length === 0 ? (
             <Typography sx={{ padding: "20px" }}>No products found</Typography>
           ) : (
             <List>
-              {filteredProducts.map((product) => (
-                <ListItem key={product._id}>
-                  <ListItemText primary={product.pname} />
-                  <ListItemText secondary={"price : " + product.pprice} />
-                  <ListItemText
-                    secondary={
-                      cart[product._id] === undefined ? 0 : cart[product._id]
-                    }
-                  />
+              {products
+                .filter(
+                  (product) =>
+                    product.pname
+                      .toLowerCase()
+                      .includes(searchText.toLowerCase()) &&
+                    parseInt(product.pquantity) != 0
+                )
+                .map((product) => (
+                  <ListItem key={product._id}>
+                    <ListItemText primary={product.pname} />
+                    <ListItemText secondary={"price : " + product.pprice} />
+                    <ListItemText
+                      secondary={
+                        cart[product._id] === undefined ? 0 : cart[product._id]
+                      }
+                    />
 
-                  <IconButton onClick={() => addTocart(product)}>
-                    <AddCircleOutlineIcon sx={{ margin: "5px" }} />
-                  </IconButton>
-                  <IconButton onClick={() => removeFromCart(product)}>
-                    <RemoveCircleOutlineIcon sx={{ margin: "5px" }} />
-                  </IconButton>
-                </ListItem>
-              ))}
+                    <IconButton onClick={() => addTocart(product)}>
+                      <AddCircleOutlineIcon sx={{ margin: "5px" }} />
+                    </IconButton>
+                    <IconButton onClick={() => removeFromCart(product)}>
+                      <RemoveCircleOutlineIcon sx={{ margin: "5px" }} />
+                    </IconButton>
+                  </ListItem>
+                ))}
             </List>
           )}
         </Box>
